@@ -1,0 +1,13 @@
+query allTokens {
+  allErc721Tokens(first:5) {
+    nodes {
+      tokenId
+      owner
+      metadata: erc721MetadatumByTokenId {
+        name
+        description
+        imageUri
+      }
+    }
+  }
+}

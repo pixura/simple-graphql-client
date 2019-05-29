@@ -1,0 +1,78 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.31.1.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: d5b81f34f830edaf99422430b6d1bdf409d89b08463f666996bd6e2abc0e54f3
+
+name:           simple-graphql-client
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/Pixura/simple-graphql-client#readme>
+homepage:       https://github.com/Pixura/simple-graphql-client#readme
+bug-reports:    https://github.com/Pixura/simple-graphql-client/issues
+author:         Charles Crain
+maintainer:     charles@pixura.io
+copyright:      Pixura
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/Pixura/simple-graphql-client
+
+library
+  exposed-modules:
+      Network.GraphQL.Client
+      Network.GraphQL.Client.Types
+  other-modules:
+      Paths_simple_graphql_client
+  hs-source-dirs:
+      src
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , file-embed
+    , lens
+    , text
+    , wreq
+  default-language: Haskell2010
+
+executable simple-graphql-client-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_simple_graphql_client
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , file-embed
+    , lens
+    , simple-graphql-client
+    , text
+    , wreq
+  default-language: Haskell2010
+
+test-suite simple-graphql-client-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_simple_graphql_client
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      aeson
+    , base >=4.7 && <5
+    , file-embed
+    , lens
+    , simple-graphql-client
+    , text
+    , wreq
+  default-language: Haskell2010

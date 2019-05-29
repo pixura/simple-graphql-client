@@ -1,0 +1,12 @@
+query eventDetail( $id: String!) {
+  eventDetail:eventDetailById(id:$id) {
+    blockNumber
+    blockTimestamp
+    blockHash
+    transactionHash
+    transactionIndex
+    logIndex
+    id
+    contractAddress
+  }
+}
