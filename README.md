@@ -2,7 +2,7 @@
 
 ### Usage
 
-See the [tests file](tests/Spec.hs) for 2 simple examples
+See the [tests file](test/Spec.hs) for 2 simple examples
 
 ### Build
 
