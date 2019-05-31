@@ -7,6 +7,7 @@
 
 module Network.GraphQL.Client
   ( runQuery
+  , W.Auth(..)
   , tlsManagerSettings
   , newManager
   , Manager(..)
