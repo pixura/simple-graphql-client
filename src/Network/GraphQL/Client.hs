@@ -7,6 +7,9 @@
 
 module Network.GraphQL.Client
   ( runQuery
+  , tlsManagerSettings
+  , newManager
+  , Manager(..)
   )
 where
 
@@ -22,6 +25,8 @@ import           Control.Lens.Operators         ( (&)
                                                 , (.~)
                                                 , (^.)
                                                 )
+import Network.HTTP.Client.TLS  (tlsManagerSettings)
+import Network.HTTP.Client      (newManager, Manager(..))
 
 import           Network.GraphQL.Client.Types   ( GraphQLBody(..)
                                                 , GraphQLQueryError(..)
@@ -35,11 +40,14 @@ import           Network.GraphQL.Client.Types   ( GraphQLBody(..)
 --   or the error.
 runQuery
   :: (J.ToJSON a, J.FromJSON b, MonadIO m)
-  => String
+  => Maybe Manager
+  -> String
+  -> Maybe W.Auth
   -> GraphQLBody a
   -> m (Either GraphQLQueryError b)
-runQuery uri body = do
-  res <- liftIO $ W.post uri (J.toJSON body)
+runQuery mmgr uri mauth body = do
+  let opts = maybe W.defaults (\m -> W.defaults & W.manager .~ Right m) mmgr
+  res <- liftIO $ W.postWith opts uri (J.toJSON body)
   pure $ case J.eitherDecode (res ^. W.responseBody) of
     Left  err -> Left $ ParsingError (pack err)
     Right (GraphQLResponse (Just gqlData) Nothing) -> Right gqlData

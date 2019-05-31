@@ -22,6 +22,8 @@ description:         Please see the README on GitHub at <https://github.com/Pixu
 dependencies:
 - base >= 4.7 && < 5
 - wreq
+- http-client-tls
+- http-client
 - text
 - aeson
 - lens

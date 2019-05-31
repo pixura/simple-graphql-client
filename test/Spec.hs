@@ -23,7 +23,7 @@ main = do
 -- | AllTokens Query
 -----------------------------------------------------------------------------
 getAllTokens :: IO AllTokensResponse
-getAllTokens = runQuery "https://api.pixura.io/graphql" allTokensBody >>= \case
+getAllTokens = runQuery Nothing "https://api.pixura.io/graphql" Nothing allTokensBody >>= \case
   Left  errs -> error (show errs)
   Right edr  -> pure edr
 
@@ -68,7 +68,7 @@ instance J.FromJSON TokenMetadata
 
 getEventDetail :: IO EventDetailResponse
 getEventDetail =
-  runQuery "https://api.pixura.io/graphql" (eventDetailBody eid) >>= \case
+  runQuery Nothing "https://api.pixura.io/graphql" Nothing (eventDetailBody eid) >>= \case
     Left  errs -> error (show errs)
     Right edr  -> pure edr
 
