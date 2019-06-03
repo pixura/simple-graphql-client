@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 282f504698bd259cc52376e2c4e659d3a2bd73efd304d471687ed97127c2d892
+-- hash: 50525a193a8e35dc130a0f28f757f09183cb955a6399e51f898bd8df87888e5b
 
 name:           simple-graphql-client
 version:        0.1.0.0
@@ -36,6 +36,7 @@ library
   build-depends:
       aeson
     , base >=4.7 && <5
+    , exceptions
     , file-embed
     , http-client
     , http-client-tls
@@ -54,6 +55,7 @@ executable simple-graphql-client-exe
   build-depends:
       aeson
     , base >=4.7 && <5
+    , exceptions
     , file-embed
     , http-client
     , http-client-tls
@@ -74,6 +76,7 @@ test-suite simple-graphql-client-test
   build-depends:
       aeson
     , base >=4.7 && <5
+    , exceptions
     , file-embed
     , http-client
     , http-client-tls

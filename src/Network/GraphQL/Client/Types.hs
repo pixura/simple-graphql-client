@@ -20,6 +20,7 @@ import           Data.Aeson                     ( (.:)
                                                 , (.:?)
                                                 , (.=)
                                                 )
+import           Control.Monad.Catch            ( Exception(..) )
 import           Data.Void                      ( Void )
 import           Data.Text                      ( Text )
 import           Data.String                    ( IsString )
@@ -40,6 +41,8 @@ data GraphQLQueryError = EmptyGraphQLReponse GraphQLQuery
                        | GraphQLErrors [GraphQLError]
                        | ParsingError Text
   deriving (Show, Eq, Generic)
+
+instance Exception GraphQLQueryError
 -----------------------------------------------------------------------------
 -- | GraphQLError
 -----------------------------------------------------------------------------

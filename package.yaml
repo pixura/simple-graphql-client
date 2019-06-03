@@ -28,6 +28,7 @@ dependencies:
 - aeson
 - lens
 - file-embed
+- exceptions
 
 library:
   source-dirs: src
