@@ -47,7 +47,8 @@ runQuery
   -> GraphQLBody a
   -> m (Either GraphQLQueryError b)
 runQuery mmgr uri mauth body = do
-  let opts = maybe W.defaults (\m -> W.defaults & W.manager .~ Right m) mmgr
+  let optsNoAuth = maybe W.defaults (\m -> W.defaults & W.manager .~ Right m) mmgr
+      opts = optsNoAuth & W.auth .~ mauth
   res <- liftIO $ W.postWith opts uri (J.toJSON body)
   pure $ case J.eitherDecode (res ^. W.responseBody) of
     Left  err -> Left $ ParsingError (pack err)
