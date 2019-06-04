@@ -49,8 +49,8 @@ instance Exception GraphQLQueryError
 -- | GraphQL error response
 data GraphQLError =
   GraphQLError { message :: Text
-               , locations :: [Location]
-               , path :: [Text]
+               , locations :: Maybe [Location]
+               , path ::Maybe [Text]
                }
   deriving (Show, Eq, Generic)
 instance J.ToJSON GraphQLError where
