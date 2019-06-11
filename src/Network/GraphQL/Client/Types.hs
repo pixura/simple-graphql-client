@@ -75,15 +75,15 @@ instance J.FromJSON Location
 -- | GraphQLResponse
 -----------------------------------------------------------------------------
 -- | The response to the GraphQL query.
-data GraphQLResponse a =
-  GraphQLResponse { _data :: Maybe a
+data GraphQLResponse =
+  GraphQLResponse { _data :: Maybe J.Value
                   , errors :: Maybe [GraphQLError]
                   }
   deriving (Eq, Show, Generic)
-instance (J.ToJSON a) => J.ToJSON (GraphQLResponse a) where
+instance J.ToJSON GraphQLResponse  where
   toJSON GraphQLResponse {..} =
     J.object ["data" .= _data, "errors" .= errors]
-instance (J.FromJSON a) => J.FromJSON (GraphQLResponse a) where
+instance J.FromJSON GraphQLResponse where
   parseJSON = J.withObject "GraphQLResponse"
     $ \v -> GraphQLResponse <$> v .:? "data" <*> v .:? "errors"
 

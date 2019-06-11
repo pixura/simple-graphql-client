@@ -52,7 +52,9 @@ runQuery mmgr uri mauth body = do
   res <- liftIO $ W.postWith opts uri (J.toJSON body)
   pure $ case J.eitherDecode (res ^. W.responseBody) of
     Left  err -> Left $ ParsingError (pack err)
-    Right (GraphQLResponse (Just gqlData) Nothing) -> Right gqlData
+    Right (GraphQLResponse (Just gqlData) Nothing) -> case J.fromJSON gqlData of
+      J.Error msg -> Left $ ParsingError (pack msg)
+      J.Success v -> Right v
     Right (GraphQLResponse Nothing Nothing) ->
       Left $ EmptyGraphQLReponse (query body)
     Right (GraphQLResponse _ (Just errs)) -> Left $ GraphQLErrors errs
