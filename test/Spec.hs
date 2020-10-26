@@ -15,102 +15,39 @@ import           Network.GraphQL.Client.Types
 -- TODO :: Implement better spec. for now simple test that will crash if failed.
 main :: IO ()
 main = do
-  getAllTokens >>= print
-  getEventDetail >>= print
+  testCountries >>= print
 
 
 -----------------------------------------------------------------------------
--- | AllTokens Query
+-- | TestCountries Query
 -----------------------------------------------------------------------------
-getAllTokens :: IO (GraphQLResponse AllTokensResponse)
-getAllTokens =
-  runQuery Nothing "https://api.pixura.io/graphql" Nothing allTokensBody
+testCountries :: IO (GraphQLResponse TestCountriesResponse)
+testCountries =
+  runQuery Nothing "https://countries.trevorblades.com/" Nothing testCountriesBody
     >>= \case
           Left  errs -> error (show errs)
           Right edr  -> pure edr
 
-allTokensBody :: GraphQLBody Void
-allTokensBody = GraphQLBody
-  { graphQLBodyQuery     = $(embedStringFile "test/graphql/allTokens.graphql")
-  , graphQLBodyVariables = Nothing
+testCountriesBody :: GraphQLBody J.Value
+testCountriesBody = GraphQLBody
+  { graphQLBodyQuery     = $(embedStringFile "test/graphql/TestCountries.graphql")
+  , graphQLBodyVariables = Just $ J.object ["code" J..= ("AF" :: String)]
   }
-data AllTokensResponse = AllTokensResponse
-  { allErc721Tokens :: Nodes Erc721Token
-  }
-  deriving (Eq, Show, Generic)
-instance J.ToJSON AllTokensResponse where
-  toJSON = J.genericToJSON J.defaultOptions
-instance J.FromJSON AllTokensResponse
-
-data Erc721Token = Erc721Token
-  { tokenId  :: Integer
-  , owner    :: Text
-  , metadata :: TokenMetadata
+data TestCountriesResponse = TestCountriesResponse
+  { continent :: Continent
   }
   deriving (Eq, Show, Generic)
-instance J.ToJSON Erc721Token where
+instance J.ToJSON TestCountriesResponse where
   toJSON = J.genericToJSON J.defaultOptions
-instance J.FromJSON Erc721Token
+instance J.FromJSON TestCountriesResponse
 
-data TokenMetadata = TokenMetadata
-  { name        :: Text
-  , description :: Text
-  , imageUri    :: Text
+data Continent = Continent
+  { code  :: Text
+  , name :: Text
   }
   deriving (Eq, Show, Generic)
-instance J.ToJSON TokenMetadata where
+instance J.ToJSON Continent where
   toJSON = J.genericToJSON J.defaultOptions
-instance J.FromJSON TokenMetadata
+instance J.FromJSON Continent
 
 
-
------------------------------------------------------------------------------
--- | EventDetail Query
------------------------------------------------------------------------------
-
-getEventDetail :: IO (GraphQLResponse EventDetailResponse)
-getEventDetail =
-  runQuery Nothing "https://api.pixura.io/graphql" Nothing (eventDetailBody eid)
-    >>= \case
-          Left  errs -> error (show errs)
-          Right edr  -> pure edr
-
-eid :: Text
-eid = "0003de9b2bffbaf67fcd5e8b6a2c5c6e1b884ed1e8b22fc11a5b03ca0520aae4-23"
-
-eventDetailBody :: Text -> GraphQLBody EventDetailArgs
-eventDetailBody eid' = GraphQLBody
-  { graphQLBodyQuery     = $(embedStringFile "test/graphql/eventDetail.graphql")
-  , graphQLBodyVariables = Just $ EventDetailArgs eid'
-  }
-
-data EventDetailArgs = EventDetailArgs
-  { id :: Text
-  }
-  deriving (Eq, Show, Generic)
-instance J.ToJSON EventDetailArgs where
-  toJSON = J.genericToJSON J.defaultOptions
-instance J.FromJSON EventDetailArgs
-
-data EventDetailResponse = EventDetailResponse
-  { eventDetail :: Maybe EventDetail
-  }
-  deriving (Eq, Show, Generic)
-instance J.ToJSON EventDetailResponse where
-  toJSON = J.genericToJSON J.defaultOptions
-instance J.FromJSON EventDetailResponse
-
-data EventDetail = EventDetail
-  { blockNumber      :: Integer
-  , blockTimestamp   :: Text
-  , blockHash        :: Text
-  , transactionHash  :: Text
-  , transactionIndex :: Integer
-  , logIndex         :: Integer
-  , id               :: Text
-  , contractAddress  :: Text
-  }
-  deriving (Eq, Show, Generic)
-instance J.ToJSON EventDetail where
-  toJSON = J.genericToJSON J.defaultOptions
-instance J.FromJSON EventDetail
