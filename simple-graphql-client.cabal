@@ -1,20 +1,20 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.31.1.
+-- This file has been generated from package.yaml by hpack version 0.33.0.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 50525a193a8e35dc130a0f28f757f09183cb955a6399e51f898bd8df87888e5b
+-- hash: 36d6bdcb0ff8fcdba7ffd7070167395dc9b4c8ef525f5334932ef22d223614b0
 
 name:           simple-graphql-client
-version:        0.1.0.0
+version:        1.0.0.0
 description:    Please see the README on GitHub at <https://github.com/Pixura/simple-graphql-client#readme>
 homepage:       https://github.com/Pixura/simple-graphql-client#readme
 bug-reports:    https://github.com/Pixura/simple-graphql-client/issues
 author:         Charles Crain
-maintainer:     charles@pixura.io
+maintainer:     charles@superrare.com
 copyright:      Pixura
-license:        BSD3
+license:        MIT
 license-file:   LICENSE
 build-type:     Simple
 extra-source-files:
@@ -37,30 +37,10 @@ library
       aeson
     , base >=4.7 && <5
     , exceptions
-    , file-embed
     , http-client
     , http-client-tls
+    , http-types
     , lens
-    , text
-    , wreq
-  default-language: Haskell2010
-
-executable simple-graphql-client-exe
-  main-is: Main.hs
-  other-modules:
-      Paths_simple_graphql_client
-  hs-source-dirs:
-      app
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N
-  build-depends:
-      aeson
-    , base >=4.7 && <5
-    , exceptions
-    , file-embed
-    , http-client
-    , http-client-tls
-    , lens
-    , simple-graphql-client
     , text
     , wreq
   default-language: Haskell2010
@@ -80,6 +60,7 @@ test-suite simple-graphql-client-test
     , file-embed
     , http-client
     , http-client-tls
+    , http-types
     , lens
     , simple-graphql-client
     , text

@@ -1,3 +1,4 @@
-# Changelog for graphql-tests
+# Changelog for simple-graphql-client
 
 ## Unreleased changes
+

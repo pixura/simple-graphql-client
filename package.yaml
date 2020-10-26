@@ -1,9 +1,9 @@
 name:                simple-graphql-client
-version:             0.1.0.0
+version:             1.0.0.0
 github:              "Pixura/simple-graphql-client"
-license:             BSD3
+license:             MIT
 author:              "Charles Crain"
-maintainer:          "charles@pixura.io"
+maintainer:          "charles@superrare.com"
 copyright:           "Pixura"
 
 extra-source-files:
@@ -24,26 +24,14 @@ dependencies:
 - wreq
 - http-client-tls
 - http-client
+- http-types
 - text
 - aeson
 - lens
-- file-embed
 - exceptions
 
 library:
   source-dirs: src
-
-executables:
-  simple-graphql-client-exe:
-    main:                Main.hs
-    source-dirs:         app
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    dependencies:
-    - simple-graphql-client
-    - file-embed
 
 tests:
   simple-graphql-client-test:
@@ -55,3 +43,4 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - simple-graphql-client
+    - file-embed

@@ -8,9 +8,9 @@ import qualified Data.Aeson                    as J
 import           Data.FileEmbed                 ( embedStringFile )
 import           GHC.Generics
 import           Data.Text
-import           Data.Void 
-import           Network.GraphQL.Client         ( runQuery )
-import           Network.GraphQL.Client.Types         (  GraphQLBody(..), Nodes )
+import           Data.Void
+import           Network.GraphQL.Client         
+import           Network.GraphQL.Client.Types   
 
 -- TODO :: Implement better spec. for now simple test that will crash if failed.
 main :: IO ()
@@ -22,39 +22,41 @@ main = do
 -----------------------------------------------------------------------------
 -- | AllTokens Query
 -----------------------------------------------------------------------------
-getAllTokens :: IO AllTokensResponse
-getAllTokens = runQuery Nothing "https://api.pixura.io/graphql" Nothing allTokensBody >>= \case
-  Left  errs -> error (show errs)
-  Right edr  -> pure edr
+getAllTokens :: IO (GraphQLResponse AllTokensResponse)
+getAllTokens =
+  runQuery Nothing "https://api.pixura.io/graphql" Nothing allTokensBody
+    >>= \case
+          Left  errs -> error (show errs)
+          Right edr  -> pure edr
 
 allTokensBody :: GraphQLBody Void
 allTokensBody = GraphQLBody
-  { query     = $(embedStringFile "test/graphql/allTokens.graphql")
-  , variables = Nothing
+  { graphQLBodyQuery     = $(embedStringFile "test/graphql/allTokens.graphql")
+  , graphQLBodyVariables = Nothing
   }
-data AllTokensResponse =
-  AllTokensResponse { allErc721Tokens :: Nodes Erc721Token
-                    }
+data AllTokensResponse = AllTokensResponse
+  { allErc721Tokens :: Nodes Erc721Token
+  }
   deriving (Eq, Show, Generic)
 instance J.ToJSON AllTokensResponse where
   toJSON = J.genericToJSON J.defaultOptions
 instance J.FromJSON AllTokensResponse
 
-data Erc721Token =
-  Erc721Token { tokenId :: Integer
-              , owner :: Text
-              , metadata :: TokenMetadata
-              }
+data Erc721Token = Erc721Token
+  { tokenId  :: Integer
+  , owner    :: Text
+  , metadata :: TokenMetadata
+  }
   deriving (Eq, Show, Generic)
 instance J.ToJSON Erc721Token where
   toJSON = J.genericToJSON J.defaultOptions
 instance J.FromJSON Erc721Token
 
-data TokenMetadata =
-  TokenMetadata { name :: Text
-                , description :: Text
-                , imageUri :: Text
-                }
+data TokenMetadata = TokenMetadata
+  { name        :: Text
+  , description :: Text
+  , imageUri    :: Text
+  }
   deriving (Eq, Show, Generic)
 instance J.ToJSON TokenMetadata where
   toJSON = J.genericToJSON J.defaultOptions
@@ -66,45 +68,48 @@ instance J.FromJSON TokenMetadata
 -- | EventDetail Query
 -----------------------------------------------------------------------------
 
-getEventDetail :: IO EventDetailResponse
+getEventDetail :: IO (GraphQLResponse EventDetailResponse)
 getEventDetail =
-  runQuery Nothing "https://api.pixura.io/graphql" Nothing (eventDetailBody eid) >>= \case
-    Left  errs -> error (show errs)
-    Right edr  -> pure edr
+  runQuery Nothing "https://api.pixura.io/graphql" Nothing (eventDetailBody eid)
+    >>= \case
+          Left  errs -> error (show errs)
+          Right edr  -> pure edr
 
 eid :: Text
 eid = "0003de9b2bffbaf67fcd5e8b6a2c5c6e1b884ed1e8b22fc11a5b03ca0520aae4-23"
 
 eventDetailBody :: Text -> GraphQLBody EventDetailArgs
 eventDetailBody eid' = GraphQLBody
-  { query     = $(embedStringFile "test/graphql/eventDetail.graphql")
-  , variables = Just $ EventDetailArgs eid'
+  { graphQLBodyQuery     = $(embedStringFile "test/graphql/eventDetail.graphql")
+  , graphQLBodyVariables = Just $ EventDetailArgs eid'
   }
 
-data EventDetailArgs = EventDetailArgs { id :: Text }
+data EventDetailArgs = EventDetailArgs
+  { id :: Text
+  }
   deriving (Eq, Show, Generic)
 instance J.ToJSON EventDetailArgs where
   toJSON = J.genericToJSON J.defaultOptions
 instance J.FromJSON EventDetailArgs
 
-data EventDetailResponse =
-  EventDetailResponse { eventDetail :: Maybe EventDetail
-                      }
+data EventDetailResponse = EventDetailResponse
+  { eventDetail :: Maybe EventDetail
+  }
   deriving (Eq, Show, Generic)
 instance J.ToJSON EventDetailResponse where
   toJSON = J.genericToJSON J.defaultOptions
 instance J.FromJSON EventDetailResponse
 
-data EventDetail =
-  EventDetail { blockNumber :: Integer
-              , blockTimestamp :: Text
-              , blockHash :: Text
-              , transactionHash :: Text
-              , transactionIndex :: Integer
-              , logIndex :: Integer
-              , id :: Text
-              , contractAddress :: Text
-              }
+data EventDetail = EventDetail
+  { blockNumber      :: Integer
+  , blockTimestamp   :: Text
+  , blockHash        :: Text
+  , transactionHash  :: Text
+  , transactionIndex :: Integer
+  , logIndex         :: Integer
+  , id               :: Text
+  , contractAddress  :: Text
+  }
   deriving (Eq, Show, Generic)
 instance J.ToJSON EventDetail where
   toJSON = J.genericToJSON J.defaultOptions
